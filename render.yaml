@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: kokoro-tts-jwt
+    env: python
+    region: oregon
+    plan: starter  # Recommended for better performance
+    buildCommand: |
+      echo "=== Installing system dependencies ==="
+      apt-get update && apt-get install -y espeak-ng build-essential
+      echo "=== Upgrading pip ==="
+      python -m pip install --upgrade pip setuptools wheel
+      echo "=== Installing PyTorch CPU ==="
+      pip install torch==2.0.1+cpu torchaudio==2.0.2+cpu --index-url https://download.pytorch.org/whl/cpu
+      echo "=== Installing Kokoro TTS ==="
+      pip install "kokoro>=0.9.4" soundfile
+      echo "=== Installing other requirements ==="
+      pip install -r requirements.txt
+      echo "=== Verifying installations ==="
+      python -c "import torch; print(f'PyTorch: {torch.__version__}')"
+      python -c "import kokoro; print('Kokoro TTS: ✅')"
+      python -c "import jwt; print('JWT: ✅')"
+      echo "=== Build complete ==="
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"

@@ -1,0 +1,28 @@
+# Core web framework
+fastapi==0.100.0
+uvicorn[standard]==0.20.0
+
+# JWT Authentication
+PyJWT==2.8.0
+passlib[bcrypt]==1.7.4
+
+# Audio processing
+soundfile==0.12.1
+numpy==1.24.0
+
+# PyTorch CPU version (will be installed in build command)
+# torch
+# torchaudio
+
+# Kokoro TTS (will be installed in build command)
+# kokoro>=0.9.4
+
+# Additional dependencies for Kokoro
+# misaki (G2P library used by Kokoro)
+# phonemizer
+
+# Utilities
+python-dotenv==1.0.0
+
+# Pydantic
+pydantic==1.10.12
